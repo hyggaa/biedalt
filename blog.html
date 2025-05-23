@@ -5,6 +5,23 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Блог</title>
   <link rel="stylesheet" href="blog.css" />
+  <style>
+    .hidden { display: none; }
+    .edit-btn, .save-btn { margin-top: 10px; }
+    .admin-panel { margin: 20px 0; padding: 10px; background: #eee; }
+    #adminLoginBtn {
+      padding: 0.6rem 1.2rem;
+      font-size: 1rem;
+      background-color: #0077ff;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    #adminLoginBtn:hover {
+      background-color: #005fcc;
+    }
+  </style>
 </head>
 <body>
   <header>
@@ -18,13 +35,32 @@
   </header>
 
   <main>
+    <!-- Админ нэвтрэх товч -->
+    <div style="text-align: center; margin-top: 2rem;">
+      <button id="adminLoginBtn">🛠 Админ нэвтрэх</button>
+    </div>
+
+    <!-- Нэвтрэх форм -->
+    <section class="admin-panel hidden" id="loginForm">
+      <h3>Админ нэвтрэх</h3>
+      <input type="text" id="username" placeholder="Хэрэглэгчийн нэр" />
+      <input type="password" id="password" placeholder="Нууц үг" />
+      <button onclick="login()">Нэвтрэх</button>
+    </section>
+
     <section class="blog">
       <h2>Миний талаар:</h2>
-      <article>
-        <p>Миний бие extreme спорт-д их дуртай, extreme спорт нь мэдрэмжийн хувьд маш олон янз байдаг. Айдас, сэтгэл догдлол, адреналин, зориг, итгэл—тэдгээр нь бүгд энэ спортыг онцлог болгодог. Миний хувьд энэ спортууд нь зөвхөн физик бэрхшээл төдийгүй, сэтгэл санааны хувьд ч нэгэн сонирхолтой аялал болдог.</p>
+      <article id="blogArticle">
+        <p id="blogText">
+          Миний бие extreme спорт-д их дуртай, extreme спорт нь мэдрэмжийн хувьд маш олон янз байдаг.
+          Айдас, сэтгэл догдлол, адреналин, зориг, итгэл—тэдгээр нь бүгд энэ спортыг онцлог болгодог.
+          Миний хувьд энэ спортууд нь зөвхөн физик бэрхшээл төдийгүй, сэтгэл санааны хувьд ч нэгэн сонирхолтой аялал болдог.
+        </p>
+        <textarea id="editor" class="hidden" rows="6" cols="60"></textarea>
+        <button class="edit-btn hidden" onclick="editArticle()">Засах</button>
+        <button class="save-btn hidden" onclick="saveArticle()">Хадгалах</button>
         <img src="extreme.jpg" alt="Extreme Sports" />
       </article>
-      
     </section>
   </main>
 
@@ -35,10 +71,49 @@
   <script>
     const modeToggle = document.getElementById('modeToggle');
     const body = document.body;
+    const loginForm = document.getElementById('loginForm');
+    const adminLoginBtn = document.getElementById('adminLoginBtn');
+    const editBtn = document.querySelector('.edit-btn');
+    const saveBtn = document.querySelector('.save-btn');
+    const blogText = document.getElementById('blogText');
+    const editor = document.getElementById('editor');
 
+    // Dark mode toggle
     modeToggle.addEventListener('click', () => {
       body.classList.toggle('dark-mode');
     });
+
+    // Админ товч дээр дарсан үед нэвтрэх форм гарна
+    adminLoginBtn.addEventListener('click', () => {
+      loginForm.classList.toggle('hidden');
+    });
+
+    function login() {
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+
+      if (username === "admin" && password === "1234") {
+        alert("Амжилттай нэвтэрлээ");
+        loginForm.classList.add('hidden');
+        adminLoginBtn.style.display = 'none';
+        editBtn.classList.remove('hidden');
+        saveBtn.classList.remove('hidden');
+      } else {
+        alert("Нэвтрэх нэр эсвэл нууц үг буруу байна");
+      }
+    }
+
+    function editArticle() {
+      editor.value = blogText.textContent.trim();
+      blogText.classList.add('hidden');
+      editor.classList.remove('hidden');
+    }
+
+    function saveArticle() {
+      blogText.textContent = editor.value;
+      blogText.classList.remove('hidden');
+      editor.classList.add('hidden');
+    }
   </script>
 </body>
 </html>
